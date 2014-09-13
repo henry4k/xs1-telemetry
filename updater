@@ -1,0 +1,23 @@
+#!/bin/sh
+cd $(dirname $0)
+
+case $1 in
+    start)
+        if [ ! -e updater.pid ]; then
+            nohup python3 updater.py >updater.log &
+            PID=$!
+            echo $PID > updater.pid
+        else
+            echo 'Updater seems to be running already.'
+        fi
+    ;;
+    stop)
+        if [ -e updater.pid ]; then
+            PID=$(cat updater.pid)
+            kill $PID
+            rm updater.pid
+        else
+            echo 'Updater is not running.'
+        fi
+    ;;
+esac

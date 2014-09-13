@@ -1,0 +1,73 @@
+{
+    "database":
+    {
+        "type": "sqlite",
+        "connection": "telemetry.db",
+        "sensors":
+        [
+            "Innentemperatur",
+            "Innenluftfeuchte",
+            "TeichTemperatur",
+            "Regenintensitaet",
+            "Regenzaehler",
+            "Windrichtung",
+            "Windgeschwindigkeit",
+            "Windboeen",
+            "Aussentemperatur",
+            "Aussenluftfeuchte",
+            "Kellertemperatur",
+            "Kellerfeuchtigkeit"
+        ]
+    },
+    "xs1":
+    {
+        "host": "192.168.1.242"
+    },
+    "server":
+    {
+        "host": "",
+        "port": 7000
+    },
+    "updater":
+    {
+        "interval": 300
+    },
+    "graphs":
+    {
+        "temperature":
+        {
+            "total": false,
+            "type": "line",
+            "sensors":
+            [
+                "Innentemperatur",
+                "TeichTemperatur",
+                "Aussentemperatur",
+                "Kellertemperatur"
+            ]
+        },
+        "humidity":
+        {
+            "total": false,
+            "type": "line",
+            "sensors":
+            [
+                "Innenluftfeuchte",
+                "Aussenluftfeuchte",
+                "Kellerfeuchtigkeit"
+            ]
+        },
+        "windspeed":
+        {
+            "total": false,
+            "type": "line",
+            "sensors": [ "Windgeschwindigkeit" ]
+        },
+        "rainlevel":
+        {
+            "total": false,
+            "type": "bar",
+            "sensors": [ "Regenzaehler" ]
+        }
+    }
+}
