@@ -1,5 +1,5 @@
 #!/bin/sh
-FILES='server server.py updater updater.py service.bash telemetry'
+FILES='server server.py updater updater.py service.sh telemetry'
 
 HOST='admin@synology'
 DESTINATION='/volume1/telemetry'

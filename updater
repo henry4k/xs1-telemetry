@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 cd $(dirname $0)
 COMMAND='python3 updater.py'
-source service.bash
+source service.sh
