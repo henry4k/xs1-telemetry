@@ -1,6 +1,7 @@
 import json
 import datetime
 import http.client
+from utils import info, error
 
 class XS1CommandError(RuntimeError):
     error_messages = {
@@ -42,9 +43,11 @@ class XS1Connection:
         url = '/control?callback=x&cmd='+command
         for name, value in kwargs.items():
             url += '&'+name+'='+str(value)
+        info('xs1 command {}', url)
         self.connection.request('GET', url)
         response = self.connection.getresponse()
         if response.status != 200:
+            info('bad response status: {}', response.status)
             return None
         raw_result = response.read().decode('utf-8')
         # Remove 'x(' and ')\n\r\n' that surround the json:
