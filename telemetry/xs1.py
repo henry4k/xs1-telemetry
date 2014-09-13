@@ -1,7 +1,7 @@
 import json
 import datetime
 import http.client
-from utils import info, error
+from telemetry.utils import info, error
 
 class XS1CommandError(RuntimeError):
     error_messages = {

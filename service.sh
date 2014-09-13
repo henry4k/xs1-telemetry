@@ -3,6 +3,8 @@
 # PID_FILE
 # LOG_FILE
 
+set -e
+
 if [ -z "$NAME" ]; then
     NAME="$(basename $0)"
 fi
@@ -60,14 +62,14 @@ case $1 in
         if $0 is_running; then
             return 1
         else
-            nohup $COMMAND >"$LOG_FILE" &
+            eval "nohup $COMMAND" >"$LOG_FILE" &
             echo $! > "$PID_FILE"
             return 0
         fi
     ;;
     stop_)
         if $0 is_running; then
-            local pid=$(cat "$PID_FILE")
+            pid=$(cat "$PID_FILE")
             kill $pid
             rm "$PID_FILE"
             return 0

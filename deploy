@@ -1,8 +1,0 @@
-#!/bin/sh
-FILES='server server.py updater updater.py service.sh telemetry'
-
-HOST='admin@synology'
-DESTINATION='/volume1/telemetry'
-
-scp -r $FILES $HOST:$DESTINATION
-ssh $HOST "cd $DESTINATION && ./server restart && ./updater restart"
