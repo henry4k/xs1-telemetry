@@ -1,23 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 cd $(dirname $0)
-
-case $1 in
-    start)
-        if [ ! -e server.pid ]; then
-            nohup python3 server.py >server.log &
-            PID=$!
-            echo $PID > server.pid
-        else
-            echo 'Server seems to be running already.'
-        fi
-    ;;
-    stop)
-        if [ -e server.pid ]; then
-            PID=$(cat server.pid)
-            kill $PID
-            rm server.pid
-        else
-            echo 'Server is not running.'
-        fi
-    ;;
-esac
+COMMAND='python3 server.py'
+source service.bash
