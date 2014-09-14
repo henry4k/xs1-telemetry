@@ -67,8 +67,7 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
             self.writeJsonResult(404, dict(error='No such resource.'))
 
 class Server(http.server.HTTPServer):
-    def __init__( self, address, xs1_connection, db_connection, graphs ):
+    def __init__( self, address, db_connection, graphs ):
         http.server.HTTPServer.__init__(self, address, RequestHandler)
-        self.xs1_connection = xs1_connection
         self.db_connection = db_connection
         self.graphs = graphs

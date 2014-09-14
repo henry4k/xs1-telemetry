@@ -14,10 +14,10 @@ if __name__ == '__main__':
     xs1_host = config['xs1']['host']
     update_interval = int(config['updater']['interval'])
 
-    xs1_connection = XS1Connection(xs1_host)
     db_connection = DatabaseConnection(database, sensors)
 
     while True:
+        xs1_connection = XS1Connection(xs1_host)
         sensor_names = db_connection.get_sensors()
         sensor_values = list()
         for sensor_name in sensor_names:
@@ -27,6 +27,7 @@ if __name__ == '__main__':
                 sensor_values.append(sensor.value)
             else:
                 raise RuntimeError('Sensor "'+sensor_name+'" does not exist.')
+        xs1_connection.close()
         db_connection.insert_measurements(sensor_values)
         db_connection.commit()
 
@@ -36,5 +37,4 @@ if __name__ == '__main__':
                                update_interval) != None:
             break
 
-    xs1_connection.close()
     db_connection.close()

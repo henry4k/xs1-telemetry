@@ -17,22 +17,18 @@ class ServerThread(threading.Thread):
         database = config['database']['connection']
         graphs = config['graphs']
         sensors = gather_sensors(config)
-        xs1_host = config['xs1']['host']
         server_host = config['server']['host']
         server_port = int(config['server']['port'])
         server_address = (server_host, server_port)
 
-        xs1_connection = XS1Connection(xs1_host)
         db_connection = DatabaseConnection(database, sensors)
         server = Server(server_address,
-                        xs1_connection,
                         db_connection,
                         graphs)
         self.server = server
 
         server.serve_forever()
 
-        xs1_connection.close()
         db_connection.close()
         server.server_close()
 
