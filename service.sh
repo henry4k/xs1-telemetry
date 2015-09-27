@@ -1,16 +1,17 @@
-# NAME
+# NAME (defaults to basename)
 # COMMAND
-# PID_FILE
-# LOG_FILE
+# PID_FILE (defaults to ${NAME}.pid)
+# LOG_FILE (defaults to ${NAME}.log)
 
 set -e
 
 if [ -z "$NAME" ]; then
-    NAME="$(basename $0)"
+    NAME="$(basename "$0")"
 fi
 
 if [ -z "$COMMAND" ]; then
     echo "$NAME did not configure a command."
+    exit 1
 fi
 
 if [ -z "$PID_FILE" ]; then
@@ -21,60 +22,69 @@ if [ -z "$LOG_FILE" ]; then
     LOG_FILE="${NAME}.log"
 fi
 
+RESTART_WAIT=2
+
 case $1 in
     status)
-        if $0 is_running; then
+        if "$0" is_running; then
             echo "$NAME is running."
         else
             echo "$NAME is not running."
         fi
+        exit 0
     ;;
     start)
-        if $0 start_; then
+        if "$0" start_; then
             echo "Started $NAME."
+            exit 0
         else
             echo "$NAME seems to be running already."
+            exit 1
         fi
     ;;
     stop)
-        if $0 stop_; then
+        if "$0" stop_; then
             echo "Stopped $NAME."
+            exit 0
         else
             echo "$NAME is not running."
+            exit 1
         fi
     ;;
     restart)
-        $0 stop_
-        if $0 start_; then
-            echo "Restarted $NAME"
-        else
-            echo "Restarting of $NAME failed."
-        fi
+        "$0" stop
+        sleep $RESTART_WAIT
+        "$0" start
     ;;
     is_running)
         if [ ! -e "$PID_FILE" ]; then
-            return 1
+            exit 1
         else
-            return 0
+            pid=$(cat "$PID_FILE")
+            if ps -p $pid >/dev/null; then
+                exit 0
+            else
+                exit 1
+            fi
         fi
     ;;
     start_)
-        if $0 is_running; then
-            return 1
+        if "$0" is_running; then
+            exit 1
         else
-            eval "nohup $COMMAND" >"$LOG_FILE" &
+            nohup $COMMAND >"$LOG_FILE" &
             echo $! > "$PID_FILE"
-            return 0
+            exit 0
         fi
     ;;
     stop_)
-        if $0 is_running; then
+        if "$0" is_running; then
             pid=$(cat "$PID_FILE")
             kill $pid
             rm "$PID_FILE"
-            return 0
+            exit 0
         else
-            return 1
+            exit 1
         fi
     ;;
 esac
