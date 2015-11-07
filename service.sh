@@ -1,3 +1,5 @@
+# Miniservice v1
+
 # NAME (defaults to basename)
 # COMMAND
 # PID_FILE (defaults to ${NAME}.pid)
@@ -61,7 +63,7 @@ case $1 in
             exit 1
         else
             pid=$(cat "$PID_FILE")
-            if ps -p $pid >/dev/null; then
+            if test -n "$(ps | grep -E "^\\s$pid")"; then
                 exit 0
             else
                 exit 1
